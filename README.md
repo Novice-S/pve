@@ -95,7 +95,14 @@ apt update && apt install sudo git curl wget -y
 ```bash
 wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh" && chmod 700 /root/auto_install.sh && /root/auto_install.sh
 ```
-
+虚拟机掉卡解决办法：运行此修复命令后
+```bash
+apt update && apt install linux-headers-$(uname -r) build-essential dkms -y
+```
+再重装N卡驱动
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/Novice-S/nvidia-install-scripts/main/install_nvidia.sh)
+```
 
 ## 📂 分步执行指南
 
