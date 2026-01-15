@@ -93,7 +93,7 @@ apt update && apt install sudo git curl wget -y
 ```
 您可以直接运行 `auto_install.sh` 脚本，它会自动按顺序执行下方的所有步骤。
 ```bash
-wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh" && chmod 700 /root/install.sh && /root/auto_install.sh
+wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh" && chmod 700 /root/auto_install.sh && /root/auto_install.sh
 ```
 
 
