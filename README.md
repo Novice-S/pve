@@ -91,8 +91,7 @@ https://github.com/spiritLHLS/ecs
 您可以直接运行 `auto_install.sh` 脚本，它会自动按顺序执行下方的所有步骤。
 
 ```bash
-chmod +x auto_install.sh
-./auto_install.sh
+curl -o auto_install.sh https://raw.githubusercontent.com/Novice-S/pve/main/auto_install.sh && chmod +x auto_install.sh && ./auto_install.sh
 ```
 
 ---
