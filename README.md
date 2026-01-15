@@ -87,14 +87,15 @@ https://github.com/spiritLHLS/ecs
 本仓库包含用于 Proxmox VE 的自动化安装、环境优化、NAT 网络配置及虚拟机创建脚本。
 
 ## 🚀 快速开始 (全自动)
-
+安装 sudo、git 和 curl。
+```bash
+apt update && apt install sudo git curl -y
+```
 您可以直接运行 `auto_install.sh` 脚本，它会自动按顺序执行下方的所有步骤。
-
 ```bash
 curl -o auto_install.sh https://raw.githubusercontent.com/Novice-S/pve/main/auto_install.sh && chmod +x auto_install.sh && ./auto_install.sh
 ```
 
----
 
 ## 📂 分步执行指南
 
