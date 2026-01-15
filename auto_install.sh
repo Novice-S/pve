@@ -1,3 +1,4 @@
+cat << 'EOF' > /root/auto_install.sh
 #!/bin/bash
 
 # 定义颜色
@@ -9,7 +10,7 @@ NC='\033[0m'
 # 进度标记文件 (用来判断是第几次运行)
 STAGE_FILE="/root/.pve_install_stage1_done"
 
-echo -e "${GREEN}=== PVE 一键配置脚本 v4.1 (含VM部署) ===${NC}"
+echo -e "${GREEN}=== PVE 全自动安装脚本 v4.2 (含内核修复与VM部署) ===${NC}"
 
 # 检查是否 root
 if [ "$EUID" -ne 0 ]; then echo -e "${RED}请使用 root 运行！${NC}"; exit 1; fi
@@ -38,7 +39,7 @@ if [ ! -f "$STAGE_FILE" ]; then
         echo "目录 /root/pve 已存在，跳过克隆。"
     fi
     
-    # [Step 2] 给执行权限
+    # [Step 2] 给执行权限 (这里修复了您之前提到的权限问题)
     echo -e "${GREEN}[Step 2] 赋予脚本执行权限...${NC}"
     chmod -R +x /root/pve/scripts
     
@@ -52,8 +53,8 @@ if [ ! -f "$STAGE_FILE" ]; then
     
     echo -e "${RED}=======================================${NC}"
     echo -e "${RED} [阶段一成功] 内核已更换，必须重启系统！${NC}"
-    echo -e "${YELLOW} 请在重启后，再次运行此脚本 (`./setup_pve.sh`)。${NC}"
-    echo -e "${YELLOW} 第二次运行将自动执行：安装PVE软件 -> 配置网络 -> 创建虚拟机 (Step 8&9)${NC}"
+    echo -e "${YELLOW} 请在重启后，再次运行此脚本 (`./auto_install.sh`)。${NC}"
+    echo -e "${YELLOW} 第二次运行将自动执行：安装PVE软件 -> 配置网络 -> 创建虚拟机${NC}"
     echo -e "${RED}=======================================${NC}"
     
     read -p "是否现在立即重启? (y/n) " -n 1 -r
@@ -61,7 +62,7 @@ if [ ! -f "$STAGE_FILE" ]; then
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         reboot
     else
-        echo "你选择了稍后重启。请务必重启后再次运行此脚本，否则 PVE 无法安装成功。"
+        echo "你选择了稍后重启。请务必重启后再次运行 ./auto_install.sh"
         exit 0
     fi
 
@@ -74,6 +75,8 @@ else
     echo -e "${GREEN}>> 当前状态：第 2 次运行 (重启后)${NC}"
     echo -e "${GREEN}>> 任务：完成 PVE 安装 -> 环境配置 -> 创建虚拟机${NC}"
     
+    # 确保权限 (防止重启后丢失或各种意外)
+    chmod -R +x /root/pve/scripts
     cd /root/pve/scripts
     
     # [Step 3 重复] 再次运行 install_pve.sh
@@ -102,7 +105,6 @@ else
     echo -e "${GREEN}[Step 7] IOMMU 检查准备就绪 (将在最终重启后生效)${NC}"
     
     # [Step 8] 创建虚拟机 101
-    # 只有前面的 install_pve.sh (第2遍) 跑完，这里才能成功
     echo -e "${GREEN}[Step 8] 正在创建虚拟机 101 (101buildvm.sh)...${NC}"
     if [ -f "./101buildvm.sh" ]; then
         chmod +x ./101buildvm.sh
@@ -121,15 +123,14 @@ else
     fi
     
     echo -e "${GREEN}=== 全流程结束！所有配置与虚拟机创建已完成 ===${NC}"
-    echo -e "${YELLOW}为了让 Step 6 的 IOMMU 直通配置生效，系统需要最后一次重启。${NC}"
-    echo -e "重启后，可运行以下命令检查分组："
-    echo "for d in /sys/kernel/iommu_groups/*/devices/*; do n=\${d#*/iommu_groups/*}; n=\${n%%/*}; printf 'Group %04d: ' \$n; lspci -nns \${d##*/}; done | grep -iE \"nvidia|ethernet\""
+    echo -e "${YELLOW}为了让 IOMMU 直通配置生效，系统建议最后一次重启。${NC}"
     
     read -p "是否现在立即重启? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         reboot
     fi
-    
-    # 任务全部完成，可以选择是否删除标记文件，通常建议保留以免误触
 fi
+EOF
+
+chmod +x /root/auto_install.sh && /root/auto_install.sh
