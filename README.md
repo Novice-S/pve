@@ -198,3 +198,9 @@ ls -l /dev/kvm
 ```bash
 iptables -t nat -L PREROUTING -n -v --line-numbers
 ```
+### 删掉 Ubuntu 云镜像自带的强制限制文件
+后台手动敲，之后就能SSH上
+
+```bash
+rm -f /etc/ssh/sshd_config.d/*.conf
+```
