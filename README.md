@@ -218,3 +218,21 @@ wget -O /root/qcow/ubuntu22.qcow2 \
 ```bash
 apt update && apt install -y iptables-persistent
 ```
+### 🛠️ 故障排查：PVE NAT 小鸡无法联网（100% 丢包）
+
+#### 1. 问题现象
+虚拟机（小鸡）内部虽然配置好了局域网 IP 和网关（如 `172.16.1.x`），但 `ping 8.8.8.8` 提示 **100% 丢包**，无法访问外网。
+
+#### 2. 根本原因
+PVE 宿主机虽然配置了入站端口转发（`PREROUTING`），但**缺少出站的地址伪装规则（MASQUERADE）**，导致小鸡发出的内网数据包无法被宿主机的外网网卡（如 `vmbr0`）正确转发。
+
+#### 3. 解决步骤（在 PVE 宿主机执行）
+
+**第一步：开启宿主机内核路由转发**
+```bash
+# 临时生效
+sysctl -w net.ipv4.ip_forward=1
+
+# 永久写入配置
+echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+sysctl -p
