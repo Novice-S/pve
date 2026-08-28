@@ -204,3 +204,10 @@ iptables -t nat -L PREROUTING -n -v --line-numbers
 ```bash
 rm -f /etc/ssh/sshd_config.d/*.conf
 ```
+### 手动下载 Ubuntu 22.04 QCOW2 镜像
+
+如果自动下载失败，可以使用 Ubuntu 官方镜像手动下载：
+
+```bash
+wget -O /root/qcow/ubuntu22.qcow2 \
+"https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64-disk-kvm.img"
