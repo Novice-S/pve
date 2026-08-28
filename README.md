@@ -226,9 +226,11 @@ apt update && apt install -y iptables-persistent
 #### 2. 根本原因
 PVE 宿主机虽然配置了入站端口转发（`PREROUTING`），但**缺少出站的地址伪装规则（MASQUERADE）**，导致小鸡发出的内网数据包无法被宿主机的外网网卡（如 `vmbr0`）正确转发。
 
-#### 3. 解决步骤（在 PVE 宿主机执行）
+#### 3. 解决步骤
 
-**第一步：开启宿主机内核路由转发**
+---
+
+### **第一步：【在 PVE 宿主机执行】开启内核路由转发**
 ```bash
 # 临时生效
 sysctl -w net.ipv4.ip_forward=1
@@ -236,3 +238,18 @@ sysctl -w net.ipv4.ip_forward=1
 # 永久写入配置
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 sysctl -p
+```
+###第二步：【在 PVE 宿主机执行】添加 MASQUERADE 出站伪装规则
+(注：请根据实际网段调整 -s 后面的小鸡网段，外网网卡通常为 vmbr0)
+
+```bash
+iptables -t nat -A POSTROUTING -s 172.16.1.0/24 -o vmbr0 -j MASQUERADE
+```
+###第三步：【在 PVE 宿主机执行】持久化保存规则（防止重启失效）
+```bash
+# 确保已安装持久化工具
+apt update && apt install -y iptables-persistent netfilter-persistent
+
+# 保存当前规则
+netfilter-persistent save
+```
