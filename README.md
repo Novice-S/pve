@@ -210,7 +210,7 @@ rm -f /etc/ssh/sshd_config.d/*.conf
 
 ```bash
 wget -O /root/qcow/ubuntu22.qcow2 \
-"https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64-disk-kvm.img"
+"https://github.com/oneclickvirt/pve_kvm_images/releases/download/ubuntu/ubuntu2204.qcow2"
 ```
 
 ### 安装 iptables-persistent
