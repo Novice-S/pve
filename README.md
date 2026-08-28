@@ -211,3 +211,10 @@ rm -f /etc/ssh/sshd_config.d/*.conf
 ```bash
 wget -O /root/qcow/ubuntu22.qcow2 \
 "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64-disk-kvm.img"
+```
+
+### 安装 iptables-persistent
+
+```bash
+apt update && apt install -y iptables-persistent
+```
