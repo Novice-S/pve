@@ -12,7 +12,7 @@ init_params() {
     user="${2:-administrator}"
     password="${3:-123456}"
     core="${4:-1}"
-    memory="${5:-6144}"
+    memory="${5:-10240}"
     disk="${6:-20}"
     sshn="${7:-50041}"
     web1_port="${8:-50042}"
